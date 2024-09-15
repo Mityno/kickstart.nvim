@@ -833,6 +833,9 @@ require('lazy').setup({
     'marko-cerovac/material.nvim',
   },
   {
+    'sainnhe/edge',
+  },
+  {
     'sainnhe/everforest',
     lazy = false,
     priority = 1000, -- Make sure to load this before all the other start plugins.
