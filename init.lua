@@ -90,9 +90,9 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+vim.o.guifont = 'GeistMono NFP:14'
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-vim.o.guifont = 'GeistMono NFP'
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -121,6 +121,8 @@ end)
 
 -- Enable break indent
 vim.opt.breakindent = true
+vim.opt.expandtab = true -- convert tabs to spaces
+vim.opt.list = true -- show tab characters and trailing whitespaces
 
 -- Save undo history
 vim.opt.undofile = true
