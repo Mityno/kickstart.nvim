@@ -90,9 +90,10 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.o.guifont = 'GeistMono NFP:14'
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
+vim.o.guifont = 'GeistMono NFP:h12'
+
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -846,7 +847,7 @@ require('lazy').setup({
       -- directly inside the plugin declaration.
       vim.o.background = 'light'
       vim.o.termguicolors = true
-      vim.g.everforest_background = 'hard'
+      vim.g.everforest_background = (vim.loop.os_uname().sysname == 'Linux') and 'medium' or 'hard'
       vim.g.everforest_enable_italic = true
       vim.cmd.colorscheme 'everforest'
       vim.cmd.hi 'Comment gui=none'
@@ -940,7 +941,7 @@ require('lazy').setup({
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
@@ -963,6 +964,7 @@ require('lazy').setup({
   },
 })
 
+-- Neovide configuration
 if vim.g.neovide then
   -- Put anything you want to happen only in Neovide here
   vim.g.neovide_fullscreen = true
