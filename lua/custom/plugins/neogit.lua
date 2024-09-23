@@ -6,4 +6,11 @@ return {
     'nvim-telescope/telescope.nvim',
   },
   config = true,
+  keys = {
+    {
+      '<leader>gs',
+      '<cmd>:Neogit<cr>',
+      desc = '[G]it [S]tatus',
+    },
+  },
 }
