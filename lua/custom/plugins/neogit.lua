@@ -9,7 +9,7 @@ return {
   keys = {
     {
       '<leader>gs',
-      '<cmd>:Neogit<cr>',
+      '<cmd>:Neogit cwd=%:p:h<cr>',
       desc = '[G]it [S]tatus',
     },
   },
