@@ -1,4 +1,5 @@
-return {
+return {}
+--[[ return {
   'ray-x/lsp_signature.nvim',
   event = 'InsertEnter',
   opts = {
@@ -14,3 +15,4 @@ return {
     require('lsp_signature').setup(opts)
   end,
 }
+]]

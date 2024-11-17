@@ -84,6 +84,9 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- Disabe warnings about vim not being defined
+vim = vim
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -167,7 +170,7 @@ vim.opt.scrolloff = 10
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -213,39 +216,39 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
   if vim.v.shell_error ~= 0 then
-    error('Error cloning lazy.nvim:\n' .. out)
+    error('error cloning lazy.nvim:\n' .. out)
   end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- [[ Configure and install plugins ]]
+-- [[ configure and install plugins ]]
 --
---  To check the current status of your plugins, run
---    :Lazy
+--  to check the current status of your plugins, run
+--    :lazy
 --
---  You can press `?` in this menu for help. Use `:q` to close the window
+--  you can press `?` in this menu for help. use `:q` to close the window
 --
---  To update plugins you can run
---    :Lazy update
+--  to update plugins you can run
+--    :lazy update
 --
--- NOTE: Here is where you install your plugins.
+-- note: here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  -- note: plugins can be added with a link (or for a github repo: 'owner/repo' link).
+  'tpope/vim-sleuth', -- detect tabstop and shiftwidth automatically
 
-  -- NOTE: Plugins can also be added by using a table,
+  -- note: plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
   --
-  -- Use `opts = {}` to force a plugin to be loaded.
+  -- use `opts = {}` to force a plugin to be loaded.
   --
 
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
+  -- here is a more advanced example where we pass configuration
+  -- options to `gitsigns.nvim`. this is equivalent to the following lua:
   --    require('gitsigns').setup({ ... })
   --
-  -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
+  -- see `:help gitsigns` to understand what the configuration keys do
+  { -- adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
@@ -258,27 +261,27 @@ require('lazy').setup({
     },
   },
 
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
+  -- note: plugins can also be configured to run lua code when they are loaded.
   --
-  -- This is often very useful to both group configuration, as well as handle
+  -- this is often very useful to both group configuration, as well as handle
   -- lazy loading plugins that don't need to be loaded immediately at startup.
   --
-  -- For example, in the following configuration, we use:
-  --  event = 'VimEnter'
+  -- for example, in the following configuration, we use:
+  --  event = 'vimenter'
   --
-  -- which loads which-key before all the UI elements are loaded. Events can be
+  -- which loads which-key before all the ui elements are loaded. events can be
   -- normal autocommands events (`:help autocmd-events`).
   --
-  -- Then, because we use the `config` key, the configuration only runs
+  -- then, because we use the `config` key, the configuration only runs
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- Useful plugin to show you pending keybinds.
+  { -- useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    event = 'vimenter', -- sets the loading event to 'vimenter'
     opts = {
       icons = {
-        -- set icon mappings to true if you have a Nerd Font
+        -- set icon mappings to true if you have a nerd font
         mappings = vim.g.have_nerd_font,
         -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
         -- default whick-key.nvim defined Nerd Font icons, otherwise define a string table
@@ -467,7 +470,7 @@ require('lazy').setup({
     },
   },
   { 'Bilal2453/luvit-meta', lazy = true },
-  {
+  --[[ {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -683,7 +686,7 @@ require('lazy').setup({
         },
       }
     end,
-  },
+  }, ]]
 
   { -- Autoformat
     'stevearc/conform.nvim',
@@ -720,7 +723,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        python = { 'ruff', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -891,6 +894,26 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      -- Set custom key trigger for mini.comment
+      local comment_leader = '<C-:>'
+      require('mini.comment').setup {
+        mappings = {
+          -- Toggle comment (like `gcip` - comment inner paragraph) for both
+          -- Normal and Visual modes
+          comment = comment_leader,
+
+          -- Toggle comment on current line
+          comment_line = comment_leader .. comment_leader,
+
+          -- Toggle comment on visual selection
+          comment_visual = comment_leader,
+
+          -- Define 'comment' textobject (like `dgc` - delete whole comment block)
+          -- Works also in Visual mode if mapping differs from `comment_visual`
+          textobject = comment_leader,
+        },
+      }
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
@@ -981,6 +1004,9 @@ require('lazy').setup({
 })
 
 require 'custom.keymap'
+
+-- Require additional plugins configuration
+require 'custom.config.conform-config'
 
 -- Neovide configuration
 if vim.g.neovide then
