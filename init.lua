@@ -169,6 +169,21 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Configure overall diagnostic and float window
+vim.diagnostic.config {
+  virtual_text = false,
+  signs = true,
+  update_in_insert = true,
+  underline = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
+}
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -582,15 +597,28 @@ require('lazy').setup({
               group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
-
-            vim.api.nvim_create_autocmd('LspDetach', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-              callback = function(event2)
-                vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-              end,
-            })
           end
+
+          local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
+          local open_float = function()
+            -- print(vim.api.nvim_win_get_config(0))
+            -- if vim.fn.pumvisible() == 0 then
+            vim.diagnostic.open_float(nil, { focusable = false })
+            -- end
+          end
+          vim.api.nvim_create_autocmd('CursorHold', {
+            buffer = event.buf,
+            group = diagnostic_hover_autogroup,
+            callback = open_float,
+          })
+
+          vim.api.nvim_create_autocmd('LspDetach', {
+            group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+            callback = function(event2)
+              vim.lsp.buf.clear_references()
+              vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+            end,
+          })
 
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
