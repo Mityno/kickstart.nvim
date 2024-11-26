@@ -601,10 +601,13 @@ require('lazy').setup({
 
           local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
           local open_float = function()
-            -- print(vim.api.nvim_win_get_config(0))
-            -- if vim.fn.pumvisible() == 0 then
+            -- Check if a floating window is opened in the current tab
+            for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+              if vim.api.nvim_win_get_config(winid).relative ~= '' then
+                return -- If so, don't show diagnostif float
+              end
+            end
             vim.diagnostic.open_float(nil, { focusable = false })
-            -- end
           end
           vim.api.nvim_create_autocmd('CursorHold', {
             buffer = event.buf,
@@ -865,6 +868,10 @@ require('lazy').setup({
           { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
           { name = 'path' },
+        },
+        window = {
+          completion = cmp.config.window.bordered { winhighlight = 'Normal:Pmenu' },
+          documentation = cmp.config.window.bordered { winhighlight = 'Normal:Pmenu' },
         },
       }
     end,
