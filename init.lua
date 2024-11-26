@@ -600,7 +600,7 @@ require('lazy').setup({
           end
 
           local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
-          local open_float = function()
+          local open_diagnostic_float = function()
             -- Check if a floating window is opened in the current tab
             for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
               if vim.api.nvim_win_get_config(winid).relative ~= '' then
@@ -612,7 +612,7 @@ require('lazy').setup({
           vim.api.nvim_create_autocmd('CursorHold', {
             buffer = event.buf,
             group = diagnostic_hover_autogroup,
-            callback = open_float,
+            callback = open_diagnostic_float,
           })
 
           vim.api.nvim_create_autocmd('LspDetach', {
