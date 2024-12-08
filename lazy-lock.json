@@ -4,7 +4,6 @@
   "cmp-nvim-lsp-signature-help": { "branch": "main", "commit": "031e6ba70b0ad5eee49fd2120ff7a2e325b17fa7" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
   "cmp_luasnip": { "branch": "master", "commit": "98d9cb5c2c38532bd9bdb481067b20fea8f32e90" },
-  "coc.nvim": { "branch": "release", "commit": "ebe7a08ece39a7ea867cb43497ce83ad722b6f07" },
   "conform.nvim": { "branch": "master", "commit": "02fd64fb3d4b18ec029c0e0683c3dc3ec6d2c5b8" },
   "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "edge": { "branch": "master", "commit": "5b5a0683be0d9d8023a874ebf7e230095f4e1bae" },
