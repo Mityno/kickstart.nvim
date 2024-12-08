@@ -172,6 +172,21 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 -- vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Configure overall diagnostic and float window
+vim.diagnostic.config {
+  virtual_text = false,
+  signs = true,
+  update_in_insert = true,
+  underline = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+    header = '',
+    prefix = '',
+  },
+}
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -194,6 +209,10 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Tab and S-Tab to switch tabs
+vim.keymap.set('n', '<Tab>', '<cmd>tabnext<CR>', { desc = 'Move to next tab' })
+vim.keymap.set('n', '<S-Tab>', '<cmd>tabprev<CR>', { desc = 'Move to previous tab' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -470,7 +489,7 @@ require('lazy').setup({
     },
   },
   { 'Bilal2453/luvit-meta', lazy = true },
-  --[[ {
+  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -585,19 +604,31 @@ require('lazy').setup({
               group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
-
-            vim.api.nvim_create_autocmd('LspDetach', {
-              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-              callback = function(event2)
-                vim.lsp.buf.clear_references()
-                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-              end,
-            })
           end
 
-          -- Attach lsp_signature.nvim to the current LSP
-          -- Show the signature of a function when writing its arguments
-          require('lsp_signature').on_attach({}, event.buf)
+          local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
+          local open_diagnostic_float = function()
+            -- Check if a floating window is opened in the current tab
+            for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+              if vim.api.nvim_win_get_config(winid).relative ~= '' then
+                return -- If so, don't show diagnostif float
+              end
+            end
+            vim.diagnostic.open_float(nil, { focusable = false })
+          end
+          vim.api.nvim_create_autocmd('CursorHold', {
+            buffer = event.buf,
+            group = diagnostic_hover_autogroup,
+            callback = open_diagnostic_float,
+          })
+
+          vim.api.nvim_create_autocmd('LspDetach', {
+            group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+            callback = function(event2)
+              vim.lsp.buf.clear_references()
+              vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+            end,
+          })
 
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
@@ -670,6 +701,11 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'basedpyright',
+        'ruff',
+        'marksman',
+        'mdformat',
+        'shfmt',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -686,7 +722,7 @@ require('lazy').setup({
         },
       }
     end,
-  }, ]]
+  },
 
   { -- Autoformat
     'stevearc/conform.nvim',
@@ -722,6 +758,10 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        bash = { 'shfmt' },
+        sh = { 'shfmt' },
+        markdown = { 'mdformat' },
+        python = { 'ruff', 'black' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff', 'black' },
         --
@@ -766,6 +806,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
     },
     config = function()
       -- See `:help cmp`
@@ -840,8 +881,13 @@ require('lazy').setup({
             group_index = 0,
           },
           { name = 'nvim_lsp' },
+          { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
           { name = 'path' },
+        },
+        window = {
+          completion = cmp.config.window.bordered { winhighlight = 'Normal:Pmenu' },
+          documentation = cmp.config.window.bordered { winhighlight = 'Normal:Pmenu' },
         },
       }
     end,
