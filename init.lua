@@ -124,7 +124,7 @@ end)
 -- Enable break indent
 vim.opt.breakindent = true
 vim.opt.expandtab = true -- convert tabs to spaces
-vim.opt.list = true -- show tab characters and trailing whitespaces
+vim.opt.list = true      -- show tab characters and trailing whitespaces
 
 -- Save undo history
 vim.opt.undofile = true
@@ -295,7 +295,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  { -- useful plugin to show you pending keybinds.
+  {                     -- useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'vimenter', -- sets the loading event to 'vimenter'
     opts = {
@@ -338,14 +338,14 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-        { '<leader>g', group = '[G]it', mode = { 'n' } },
+        { '<leader>g', group = '[G]it',      mode = { 'n' } },
       },
     },
   },
@@ -380,7 +380,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -488,7 +488,7 @@ require('lazy').setup({
       },
     },
   },
-  { 'Bilal2453/luvit-meta', lazy = true },
+  { 'Bilal2453/luvit-meta',     lazy = true },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -500,7 +500,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -606,7 +606,8 @@ require('lazy').setup({
             })
           end
 
-          local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
+          local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover',
+            { clear = false })
           local open_diagnostic_float = function()
             -- Check if a floating window is opened in the current tab
             for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
@@ -635,6 +636,7 @@ require('lazy').setup({
           --
           -- This may be unwanted, since they displace some of your code
           if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+            vim.lsp.inlay_hint.enable(true) -- Enable by default
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
@@ -763,7 +765,6 @@ require('lazy').setup({
         markdown = { 'mdformat' },
         python = { 'ruff', 'black' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'ruff', 'black' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
