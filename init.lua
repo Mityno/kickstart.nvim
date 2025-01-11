@@ -124,7 +124,7 @@ end)
 -- Enable break indent
 vim.opt.breakindent = true
 vim.opt.expandtab = true -- convert tabs to spaces
-vim.opt.list = true      -- show tab characters and trailing whitespaces
+vim.opt.list = true -- show tab characters and trailing whitespaces
 
 -- Save undo history
 vim.opt.undofile = true
@@ -295,7 +295,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- useful plugin to show you pending keybinds.
+  { -- useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'vimenter', -- sets the loading event to 'vimenter'
     opts = {
@@ -338,14 +338,15 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-        { '<leader>g', group = '[G]it',      mode = { 'n' } },
+        { '<leader>g', group = '[G]it', mode = { 'n' } },
+        { '<leader>n', group = '[N]otification', mode = { 'n' } },
       },
     },
   },
@@ -380,7 +381,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -488,7 +489,7 @@ require('lazy').setup({
       },
     },
   },
-  { 'Bilal2453/luvit-meta',     lazy = true },
+  { 'Bilal2453/luvit-meta', lazy = true },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -497,10 +498,6 @@ require('lazy').setup({
       { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
-
-      -- Useful status updates for LSP.
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -606,8 +603,7 @@ require('lazy').setup({
             })
           end
 
-          local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover',
-            { clear = false })
+          local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
           local open_diagnostic_float = function()
             -- Check if a floating window is opened in the current tab
             for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
@@ -986,7 +982,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'python', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'python', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'regex' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1053,16 +1049,17 @@ require('lazy').setup({
 require 'custom.keymap'
 
 -- Require additional plugins configuration
-require 'custom.config.conform-config'
+require 'custom.config.snacks' -- bind Snack.notifier to show LSP status progress
 
 -- Neovide configuration
 if vim.g.neovide then
   vim.g.have_nerd_font = true
 
-  -- Put anything you want to happen only in Neovide here
   vim.g.neovide_fullscreen = true
   vim.g.neovide_cursor_animation_length = 0.05
   vim.g.neovide_cursor_trail_size = 0.6
+
+  vim.g.neovide_floating_corner_radius = 0.25
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
