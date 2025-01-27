@@ -704,6 +704,7 @@ require('lazy').setup({
         'marksman',
         'mdformat',
         'shfmt',
+        'prettierd',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -760,6 +761,7 @@ require('lazy').setup({
         sh = { 'shfmt' },
         markdown = { 'mdformat' },
         python = { 'ruff', 'black' },
+        json = { 'prettierd', 'biome' },
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
