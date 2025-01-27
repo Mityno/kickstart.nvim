@@ -940,7 +940,7 @@ require('lazy').setup({
       require('mini.surround').setup()
 
       -- Set custom key trigger for mini.comment
-      local comment_leader = '<C-:>'
+      local comment_leader = '<C-:>' and vim.g.neovide or '<C-_>'
       require('mini.comment').setup {
         mappings = {
           -- Toggle comment (like `gcip` - comment inner paragraph) for both
