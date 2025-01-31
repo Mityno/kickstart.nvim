@@ -762,6 +762,7 @@ require('lazy').setup({
         markdown = { 'mdformat' },
         python = { 'ruff', 'black' },
         json = { 'prettierd', 'biome' },
+        vhdl = { 'vsg' },
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
