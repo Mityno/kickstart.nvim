@@ -751,7 +751,7 @@ require('lazy').setup({
           lsp_format_opt = 'fallback'
         end
         return {
-          timeout_ms = 500,
+          timeout_ms = 1000,
           lsp_format = lsp_format_opt,
         }
       end,
@@ -761,8 +761,9 @@ require('lazy').setup({
         sh = { 'shfmt' },
         markdown = { 'mdformat' },
         python = { 'ruff', 'black' },
-        json = { 'prettierd', 'biome' },
+        json = { 'prettierd', 'biome', stop_after_first = true },
         vhdl = { 'vsg' },
+        c = { 'clang-format' },
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
