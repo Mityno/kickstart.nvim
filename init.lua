@@ -705,6 +705,9 @@ require('lazy').setup({
         'mdformat',
         'shfmt',
         'prettierd',
+        'clangd',
+        'clang-format',
+        'cpplint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
