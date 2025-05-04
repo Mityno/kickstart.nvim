@@ -22,17 +22,17 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
+    'mfussenegger/nvim-dap-python',
   },
   keys = function(_, keys)
     local dap = require 'dap'
     local dapui = require 'dapui'
     return {
       -- Basic debugging keymaps, feel free to change to your liking!
-      { '<F5>', dap.continue, desc = 'Debug: Start/Continue' },
-      { '<F1>', dap.step_into, desc = 'Debug: Step Into' },
-      { '<F2>', dap.step_over, desc = 'Debug: Step Over' },
-      { '<F3>', dap.step_out, desc = 'Debug: Step Out' },
+      { '<F1>', dap.continue, desc = 'Debug: Start/Continue' },
+      { '<F2>', dap.step_into, desc = 'Debug: Step Into' },
+      { '<F3>', dap.step_over, desc = 'Debug: Step Over' },
+      { '<F4>', dap.step_out, desc = 'Debug: Step Out' },
       { '<leader>b', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
       {
         '<leader>B',
@@ -63,7 +63,8 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        'python',
+        'cppdbg',
       },
     }
 
@@ -78,14 +79,17 @@ return {
         icons = {
           pause = '⏸',
           play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
+          -- step_into = '⏎',
+          -- step_over = '⏭',
+          -- step_out = '⏮',
+          -- step_back = 'b',
           run_last = '▶▶',
           terminate = '⏹',
-          disconnect = '⏏',
+          -- disconnect = '⏏',
         },
+      },
+      mappings = {
+        expand = { '<CR>', '<Tab>' },
       },
     }
 
@@ -93,13 +97,7 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
+    -- Install python specific config
+    require('dap-python').setup '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
   end,
 }
