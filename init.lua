@@ -495,8 +495,8 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
-      { 'mason-org/mason.nvim', config = true, version = '^1.0' }, -- NOTE: Must be loaded before dependants
-      { 'mason-org/mason-lspconfig.nvim', version = '^1.0' },
+      { 'mason-org/mason.nvim', opts = {} }, -- NOTE: Must be loaded before dependants
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Allows extra capabilities provided by nvim-cmp
@@ -550,6 +550,7 @@ require('lazy').setup({
           --  To jump back, press <C-t>.
           map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
+          -- Jump to the definition of the word under your cursor in a vertical split.
           map('gsd', function()
             vim.cmd 'vs'
             require('telescope.builtin').lsp_definitions()
@@ -586,6 +587,19 @@ require('lazy').setup({
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+          --
+          -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
+          ---@param client vim.lsp.Client
+          ---@param method vim.lsp.protocol.Method
+          ---@param bufnr? integer some lsp support methods only in specific files
+          ---@return boolean
+          local function client_supports_method(client, method, bufnr)
+            if vim.fn.has 'nvim-0.11' == 1 then
+              return client:supports_method(method, bufnr)
+            else
+              return client.supports_method(method, { bufnr = bufnr })
+            end
+          end
 
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
@@ -593,7 +607,7 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -606,8 +620,17 @@ require('lazy').setup({
               group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
+
+            vim.api.nvim_create_autocmd('LspDetach', {
+              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+              callback = function(event2)
+                vim.lsp.buf.clear_references()
+                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+              end,
+            })
           end
 
+          -- Show the current diagnostic(s) of the line where the cursor is located
           local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
           local open_diagnostic_float = function()
             -- Check if a floating window is opened in the current tab
@@ -636,7 +659,7 @@ require('lazy').setup({
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             vim.lsp.inlay_hint.enable(true) -- Enable by default
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
@@ -697,8 +720,10 @@ require('lazy').setup({
       --    :Mason
       --
       --  You can press `g?` for help in this menu.
-      require('mason').setup()
-
+      --
+      -- `mason` had to be setup earlier: to configure its options see the
+      -- `dependencies` table for `nvim-lspconfig` above.
+      --
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
@@ -717,6 +742,8 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        automatic_enable = true, -- INFO this is a hack to avoid a problem when loading LSPs (in vim/lsp.lua)
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -950,7 +977,7 @@ require('lazy').setup({
       require('mini.surround').setup()
 
       -- Set custom key trigger for mini.comment
-      local comment_leader = (vim.g.neovide or string.find(os.getenv 'TERM', 'kitty')) and '<C-:>' or '<C-_>'
+      local comment_leader = (vim.g.neovide or string.find(os.getenv 'TERM' or '', 'kitty')) and '<C-:>' or '<C-_>'
       require('mini.comment').setup {
         mappings = {
           -- Toggle comment (like `gcip` - comment inner paragraph) for both
@@ -974,7 +1001,7 @@ require('lazy').setup({
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      -- statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
@@ -1061,6 +1088,8 @@ require('lazy').setup({
 require 'custom.keymap'
 
 -- Require additional plugins configuration
+
+require 'custom.config.init' -- Load general configs
 require 'custom.config.snacks' -- bind Snack.notifier to show LSP status progress
 
 -- Neovide configuration

@@ -26,6 +26,7 @@ return {
       notifier = {
         render = 'fancy',
         border = 'rounded',
+        relative = 'enabled',
       },
     },
   },
