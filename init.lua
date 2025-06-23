@@ -1088,9 +1088,7 @@ require('lazy').setup({
 require 'custom.keymap'
 
 -- Require additional plugins configuration
-
-require 'custom.config.init' -- Load general configs
-require 'custom.config.snacks' -- bind Snack.notifier to show LSP status progress
+require 'custom.config.init' -- Load general plugins config
 
 -- Neovide configuration
 if vim.g.neovide then

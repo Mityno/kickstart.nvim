@@ -1,7 +1,2 @@
-require('lualine').setup {
-  options = { theme = 'everforest' },
-  sections = {
-    lualine_b = { 'branch', 'diff', 'diagnostics', 'lsp_status' },
-    lualine_c = { { 'filename', path = 1 }, 'filesize' },
-  },
-}
+require 'custom.config.lualine' -- general config for lualine
+require 'custom.config.snacks' -- bind Snack.notifier to show LSP status progress
