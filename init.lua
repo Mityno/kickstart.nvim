@@ -735,6 +735,7 @@ require('lazy').setup({
         'mdformat',
         'shfmt',
         'prettierd',
+        'biome',
         'clangd',
         'clang-format',
         'cpplint',
