@@ -796,8 +796,9 @@ require('lazy').setup({
         bash = { 'shfmt' },
         sh = { 'shfmt' },
         markdown = { 'mdformat' },
-        python = { 'ruff', 'black' },
+        python = { 'ruff', 'black', stop_after_first = true },
         json = { 'prettierd', 'biome', stop_after_first = true },
+        javascript = { 'prettierd', 'biome', stop_after_first = true },
         vhdl = { 'vsg' },
         c = { 'clang-format' },
         -- Conform can also run multiple formatters sequentially
