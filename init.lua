@@ -424,8 +424,16 @@ require('lazy').setup({
             layout_strategy = 'horizontal',
             mappings = {
               i = {
-                ['<C-y>'] = false,
+                ['<cr>'] = false,
+                ['<S-cr>'] = false,
+                ['<C-cr>'] = false,
+                ['<C-y>'] = require('telescope-undo.actions').restore,
                 ['<C-r>'] = false,
+              },
+              n = {
+                ['y'] = require('telescope-undo.actions').yank_additions,
+                ['Y'] = require('telescope-undo.actions').yank_deletions,
+                ['u'] = require('telescope-undo.actions').restore,
               },
             },
           },
@@ -730,7 +738,7 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'basedpyright',
-        'ruff',
+        'black',
         'marksman',
         'mdformat',
         'shfmt',
