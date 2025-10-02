@@ -422,6 +422,7 @@ require('lazy').setup({
           undo = {
             side_by_side = false,
             layout_strategy = 'horizontal',
+            use_delta = false,
             mappings = {
               i = {
                 ['<cr>'] = false,
