@@ -22,7 +22,8 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'mfussenegger/nvim-dap-python',
+    -- FIX removed because of dependency issue, try to re-enable when possible
+    -- 'mfussenegger/nvim-dap-python',
   },
   keys = function(_, keys)
     local dap = require 'dap'
