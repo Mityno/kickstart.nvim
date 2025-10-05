@@ -99,6 +99,6 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install python specific config
-    require('dap-python').setup '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
+    -- require('dap-python').setup '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python' FIX re-enable when possible
   end,
 }
