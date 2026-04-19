@@ -22,8 +22,7 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    -- FIX removed because of dependency issue, try to re-enable when possible
-    -- 'mfussenegger/nvim-dap-python',
+    'mfussenegger/nvim-dap-python',
   },
   keys = function(_, keys)
     local dap = require 'dap'
@@ -99,6 +98,6 @@ return {
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
     -- Install python specific config
-    -- require('dap-python').setup '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python' FIX re-enable when possible
+    require('dap-python').setup '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
   end,
 }
