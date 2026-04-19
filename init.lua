@@ -968,7 +968,21 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = true } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      signs = true,
+      highlight = {
+        pattern = { [[.*<(KEYWORDS)\s*:]], [[.*<(KEYWORDS)\s* ]] }, -- pattern or table of patterns, used for highlighting (vim regex)
+      },
+      search = {
+        -- pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+        pattern = [[\b(KEYWORDS)(:| )]], -- match without the extra colon. You'll likely get false positives
+      },
+    },
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
