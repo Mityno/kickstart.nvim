@@ -87,6 +87,9 @@ P.S. You can delete this when you're done too. It's your config now! :)
 -- Disabe warnings about vim not being defined
 vim = vim
 
+-- Terminal specific checks
+IS_KITTY = string.find(os.getenv 'TERM' or '', 'kitty') and true
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -1003,7 +1006,7 @@ require('lazy').setup({
       require('mini.surround').setup()
 
       -- Set custom key trigger for mini.comment
-      local comment_leader = (vim.g.neovide or string.find(os.getenv 'TERM' or '', 'kitty')) and '<C-:>' or '<C-_>'
+      local comment_leader = (vim.g.neovide or IS_KITTY) and '<C-:>' or '<C-_>'
       require('mini.comment').setup {
         mappings = {
           -- Toggle comment (like `gcip` - comment inner paragraph) for both
