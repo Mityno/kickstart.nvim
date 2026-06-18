@@ -10,7 +10,7 @@ local editor_icon_table = {
   xcode = 'https://logodix.com/logo/1977827.png',
   word = 'https://logodix.com/logo/47195.png',
   intellij = 'https://logodix.com/logo/1773394.png',
-  zed = 'https://zed.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo_icon.d67dc948.webp&w=750&q=100',
+  zed = 'https://zed.dev/_next/static/media/preview-app-logo.0nw_0ukesh~lr.png',
   sublimetext = 'https://www.sublimehq.com/images/sublime_text.png',
   cursor = 'https://i0.wp.com/kickiniteasy.com/wp-content/uploads/2023/08/cursor-ide-logo.jpeg?fit=150%2C150&ssl=1',
 }
