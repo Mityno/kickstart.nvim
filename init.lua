@@ -647,19 +647,40 @@ require('lazy').setup({
 
           -- Show the current diagnostic(s) of the line where the cursor is located
           local diagnostic_hover_autogroup = vim.api.nvim_create_augroup('kickstart-lsp-diagnostic-hover', { clear = false })
+          local diagnostic_hover_winid = nil
+
           local open_diagnostic_float = function()
-            -- Check if a floating window is opened in the current tab
+            -- Check if a diagnostic window is still opened in the current tab
             for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
-              if vim.api.nvim_win_get_config(winid).relative ~= '' then
-                return -- If so, don't show diagnostif float
+              local config = vim.api.nvim_win_get_config(winid)
+              local title = config.title -- @type string?
+              title = title and title[1][1]
+              if winid == diagnostic_hover_winid and title == 'LSP Diagnostics' and config.relative ~= '' then
+                return
               end
             end
-            vim.diagnostic.open_float(nil, { focusable = false })
+            _, diagnostic_hover_winid = vim.diagnostic.open_float(nil, { title = 'LSP Diagnostics', focusable = false })
           end
+
+          local close_diagnostic_float = function()
+            if diagnostic_hover_winid == nil then
+              return
+            end
+            vim.notify('Closing ' .. tostring(diagnostic_hover_winid))
+            vim.api.nvim_win_close(diagnostic_hover_winid, false)
+            diagnostic_hover_winid = nil
+          end
+
           vim.api.nvim_create_autocmd('CursorHold', {
             buffer = event.buf,
             group = diagnostic_hover_autogroup,
             callback = open_diagnostic_float,
+          })
+
+          vim.api.nvim_create_autocmd('WinLeave', {
+            buffer = event.buf,
+            group = diagnostic_hover_autogroup,
+            callback = close_diagnostic_float,
           })
 
           vim.api.nvim_create_autocmd('LspDetach', {
