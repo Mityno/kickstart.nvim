@@ -666,7 +666,6 @@ require('lazy').setup({
             if diagnostic_hover_winid == nil then
               return
             end
-            vim.notify('Closing ' .. tostring(diagnostic_hover_winid))
             vim.api.nvim_win_close(diagnostic_hover_winid, false)
             diagnostic_hover_winid = nil
           end
