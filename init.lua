@@ -659,7 +659,7 @@ require('lazy').setup({
                 return
               end
             end
-            _, diagnostic_hover_winid = vim.diagnostic.open_float(nil, { title = 'LSP Diagnostics', focusable = false })
+            _, diagnostic_hover_winid = vim.diagnostic.open_float(nil, { title = { { ' LSP Diagnostics ', 'NormalFloat' } }, focusable = false })
           end
 
           local close_diagnostic_float = function()
