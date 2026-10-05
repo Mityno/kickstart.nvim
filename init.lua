@@ -666,7 +666,19 @@ require('lazy').setup({
             if diagnostic_hover_winid == nil then
               return
             end
-            vim.api.nvim_win_close(diagnostic_hover_winid, false)
+
+            -- Check if the window still exists
+            local exists = false
+            for _, winid in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+              if winid == diagnostic_hover_winid then
+                exists = true
+                return
+              end
+            end
+
+            if exists then
+              vim.api.nvim_win_close(diagnostic_hover_winid, false)
+            end
             diagnostic_hover_winid = nil
           end
 
