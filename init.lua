@@ -849,7 +849,6 @@ require('lazy').setup({
         vhdl = { 'vsg' },
         c = { 'clang-format' },
         make = { 'bake' },
-        ocaml = { 'ocamlformat' },
         zsh = { 'shfmt' },
         -- Conform can also run multiple formatters sequentially
         --
