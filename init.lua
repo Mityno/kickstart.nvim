@@ -417,6 +417,9 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
+        defaults = {
+          mappings = { i = { ['<c-s>'] = 'select_vertical' } },
+        },
         pickers = {
           buffers = { mappings = { i = { ['<c-w>'] = 'delete_buffer' } } },
         },
