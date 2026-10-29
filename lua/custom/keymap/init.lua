@@ -6,3 +6,4 @@ end
 enable_keymaps 'quickfix'
 
 vim.keymap.set('n', '<leader>cd', '<cmd>:cd %:p:h<cr>', { desc = "[cd] to this file's directory" })
+vim.keymap.set('n', '<c-w><c-q>', vim.cmd.tabclose, { desc = 'Close this tab' })
